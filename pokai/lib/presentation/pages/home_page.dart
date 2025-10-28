@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pokai/state/pokemon_list_controller.dart';
-// En el próximo paso, importaremos 'pokemon_card.dart'
+import 'package:pokai/presentation/widgets/pokemon_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -93,13 +93,7 @@ class _HomePageState extends State<HomePage> {
 
               // --- Ítem normal de la lista ---
               final pokemon = controller.pokemonList[index];
-              
-              // Placeholder temporal (reemplazaremos esto con PokemonCard)
-              return ListTile(
-                leading: Text('#${pokemon.id}'),
-                title: Text(pokemon.name),
-                // TODO: Reemplazar con PokemonCard
-              );
+              return PokemonCard(pokemon: pokemon);
             },
           );
         },
