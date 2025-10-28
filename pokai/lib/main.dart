@@ -1,6 +1,7 @@
 // lib/main.dart (¡Versión permanente!)
 
 import 'package:flutter/material.dart';
+import 'package:pokai/presentation/pages/home_page.dart';
 import 'package:provider/provider.dart'; // 1. Importamos Provider
 
 // Importamos nuestras clases (el "cerebro" y sus dependencias)
@@ -48,16 +49,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red, // Tono rojizo estilo Pokédex
         fontFamily: 'Roboto', 
       ),
-      
-      // En el próximo paso, cambiaremos este 'home'
-      // por nuestra nueva 'HomePage'
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Pokai')),
-        body: const Center(
-          // Mostramos un spinner mientras el Controller carga los datos iniciales
-          child: CircularProgressIndicator(), 
-        ),
-      ),
+      home: const HomePage(),
     );
   }
 }
