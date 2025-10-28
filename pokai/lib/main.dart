@@ -1,5 +1,3 @@
-// lib/main.dart (¡Versión permanente!)
-
 import 'package:flutter/material.dart';
 import 'package:pokai/presentation/pages/home_page.dart';
 import 'package:provider/provider.dart'; // 1. Importamos Provider
@@ -8,7 +6,7 @@ import 'package:provider/provider.dart'; // 1. Importamos Provider
 import 'package:pokai/data/repositories/pokemon_repository.dart';
 import 'package:pokai/data/services/poke_api_service.dart';
 import 'package:pokai/state/pokemon_list_controller.dart';
-// (En el próximo paso, importaremos la HomePage aquí)
+import 'package:pokai/core/theme.dart';
 
 
 void main() {
@@ -56,11 +54,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Pokai',
       debugShowCheckedModeBanner: false, // Quitamos la cinta de "Debug"
-      theme: ThemeData( // Un tema base simple por ahora
-        brightness: Brightness.light,
-        primarySwatch: Colors.red, // Tono rojizo estilo Pokédex
-        fontFamily: 'Roboto', 
-      ),
+      theme: buildAppTheme(),
       home: const HomePage(),
     );
   }
