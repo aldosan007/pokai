@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pokai/data/models/pokemon_list_item.dart';
+import 'package:pokai/presentation/pages/detail_page.dart';
 
 class PokemonCard extends StatelessWidget {
   final PokemonListItem pokemon;
@@ -23,8 +24,13 @@ class PokemonCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: InkWell(
         onTap: () {
-          // TODO: Navegar a la pantalla de detalle en el Paso 7
-          print('Tocaste a: ${pokemon.name}');
+          Navigator.push(
+      context,
+      MaterialPageRoute(
+        // Construimos la DetailPage, pasándole el ID del pokémon tocado
+        builder: (context) => DetailPage(pokemonId: pokemon.id),
+      ),
+    );
         },
         child: Padding(
           padding: const EdgeInsets.all(12.0),
