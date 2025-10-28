@@ -22,15 +22,27 @@ void main() {
 
   runApp(
     // 3. "Inyectamos" el Cerebro (Controller) usando Provider
-    ChangeNotifierProvider(
-      
-      // 'create' es la "fábrica" que construye nuestro cerebro.
-      // Le pasamos el "gerente" (repository) que necesita para trabajar.
-      create: (context) => PokemonListController(repository)
-                          ..loadInitial(), // <-- El '..' es CLAVE:
-                                          // Crea el cerebro E INICIA la 1ra carga de datos
-      
-      child: const MyApp(), // 4. Nuestra app principal es "hija" del Provider
+// Usamos MultiProvider para inyectar MÁS DE UNA COSA
+    MultiProvider(
+      providers: [
+        // 1. Proveemos el Repository directamente
+        //    Cualquier widget hijo podrá pedirlo con context.read<PokemonRepository>()
+        Provider<PokemonRepository>(
+          create: (_) => repository,
+        ),
+
+        // 2. Proveemos el Controller (que DEPENDE del Repository)
+        //    Usamos context.read() DENTRO de create para obtener el repo ya provisto.
+        ChangeNotifierProvider<PokemonListController>(
+          create: (context) => PokemonListController(
+            context.read<PokemonRepository>(), // Le pasamos el repo
+          )..loadInitial(), // Iniciamos la carga
+        ),
+
+        // Podríamos añadir más providers aquí (ej: PokemonDetailController)
+      ],
+      // MyApp sigue siendo el hijo principal
+      child: const MyApp(),
     ),
   );
 }
