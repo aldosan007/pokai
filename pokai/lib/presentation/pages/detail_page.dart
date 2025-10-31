@@ -47,7 +47,7 @@ class _DetailPageState extends State<DetailPage> {
           _error = 'No se pudieron cargar los detalles. Verifica tu conexión.';
         });
       }
-      print('Error en DetailPage._loadDetails: $e');
+      debugPrint('Error en DetailPage._loadDetails: $e');
     }
   }
 
@@ -149,7 +149,7 @@ class _DetailPageState extends State<DetailPage> {
               borderRadius: BorderRadius.circular(15.0),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: const Color.fromARGB(26, 0, 0, 0),
                     blurRadius: 10,
                     offset: const Offset(0, 5))
               ],
