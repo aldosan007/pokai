@@ -1,9 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart'; // Importar para la imagen
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-//import 'package:google_fonts/google_fonts.dart'; // Para fuentes
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:pokai/data/models/pokemon_detail.dart';
 import 'package:pokai/data/repositories/pokemon_repository.dart';
+import 'package:pokai/state/favorites_controller.dart';
 
 class DetailPage extends StatefulWidget {
   final int pokemonId;
@@ -26,12 +27,9 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Future<void> _loadDetails() async {
-    // Reiniciar estado si estamos reintentando
     if (!mounted) return;
-    setState(() {
-      _isLoading = true;
-      _error = null;
-    });
+    // No reiniciamos el estado aquí para no causar un parpadeo
+    // setState(() { _isLoading = true; _error = null; });
 
     try {
       final repository = context.read<PokemonRepository>();
@@ -55,25 +53,48 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Usamos el nombre capitalizado para el título
+    // Para el título, podemos adivinar el nombre si aún está cargando,
+    // o simplemente mostrar el ID hasta que cargue.
     final titleName = _pokemonDetail?.name != null
-      ? '${_pokemonDetail!.name[0].toUpperCase()}${_pokemonDetail!.name.substring(1)}'
-      : 'Cargando...';
+        ? '${_pokemonDetail!.name[0].toUpperCase()}${_pokemonDetail!.name.substring(1)}'
+        : 'Pokémon #${widget.pokemonId}';
 
     return Scaffold(
       appBar: AppBar(
         title: Text(titleName),
-        backgroundColor: Colors.redAccent, // Un rojo un poco más vibrante
-        elevation: 0, // Sin sombra para un look más plano
+        // Dejamos que el Tema Global maneje el color del AppBar
+        // backgroundColor: Colors.redAccent, 
+        elevation: 0,
+        // --- AÑADIMOS BOTÓN DE FAVORITO AQUÍ TAMBIÉN ---
+        actions: [
+          if (_pokemonDetail != null) // Solo mostrar si el pokémon cargó
+            Consumer<FavoritesController>( // Importa 'favorites_controller.dart'
+              builder: (context, controller, child) {
+                final bool esFavorito = controller.isFavorite(_pokemonDetail!.id);
+                return IconButton(
+                  icon: Icon(
+                    esFavorito ? Icons.favorite : Icons.favorite_border,
+                    color: esFavorito ? Colors.white : Colors.white70,
+                  ),
+                  onPressed: () {
+                    controller.toggleFavorite(_pokemonDetail!.id);
+                  },
+                  tooltip: 'Marcar como favorito',
+                );
+              },
+            ),
+          const SizedBox(width: 8), // Pequeño espacio
+        ],
       ),
+      // Pasamos el control al _buildBody
       body: _buildBody(),
     );
   }
 
+  // --- [FUNCIÓN _buildBody() COMPLETAMENTE REHECHA] ---
   Widget _buildBody() {
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    } else if (_error != null) {
+    // Si hay un error, mostramos el error primero
+    if (_error != null) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -92,119 +113,135 @@ class _DetailPageState extends State<DetailPage> {
                 icon: const Icon(Icons.refresh),
                 label: const Text('Reintentar'),
                 onPressed: _loadDetails,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,
-                  foregroundColor: Colors.white,
-                ),
               ),
             ],
           ),
         ),
       );
-    } else if (_pokemonDetail != null) {
-      // --- Estado Éxito: Construimos la UI con los detalles ---
-      final pokemon = _pokemonDetail!;
-      // Formateo de altura y peso
-      final heightInMeters = (pokemon.height / 10).toStringAsFixed(1); // ej: 7 dm -> 0.7 m
-      final weightInKilograms = (pokemon.weight / 10).toStringAsFixed(1); // ej: 69 hg -> 6.9 kg
+    }
 
-      return SingleChildScrollView( // Para permitir scroll si el contenido es largo
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // 1. Imagen Grande
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.0),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 10,
-                      offset: const Offset(0, 5))
-                ],
-              ),
+    // --- CONSTRUIMOS LA UI INMEDIATAMENTE ---
+    // (Incluso si _isLoading es true)
+    
+    // Si _pokemonDetail no es nulo, lo usamos. Si es nulo, usamos 'null'.
+    final pokemon = _pokemonDetail;
+    
+    // Formateamos los datos solo si NO está cargando
+    final String heightInMeters =
+        !_isLoading && pokemon != null ? (pokemon.height / 10).toStringAsFixed(1) : '...';
+    final String weightInKilograms =
+        !_isLoading && pokemon != null ? (pokemon.weight / 10).toStringAsFixed(1) : '...';
+
+    // Construimos la URL de la imagen del Hero manualmente
+    // Si ya cargó, usa la URL del detalle.
+    // Si no, CONSTRUYE la URL oficial usando el ID que ya tenemos.
+    final String heroImageUrl = pokemon?.imageUrl ??
+        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${widget.pokemonId}.png';
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // 1. Imagen Grande (SIEMPRE SE CONSTRUYE)
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15.0),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5))
+              ],
+            ),
+            child: Hero(
+              // ¡EL TAG SE CONSTRUYE CON EL ID DEL WIDGET!
+              tag: 'pokemon-image-${widget.pokemonId}',
               child: CachedNetworkImage(
-                imageUrl: pokemon.imageUrl,
+                imageUrl: heroImageUrl, // Usamos la URL construida
                 placeholder: (context, url) => Container(
-                  height: 200,
+                  height: 250,
                   alignment: Alignment.center,
                   child: const CircularProgressIndicator(),
                 ),
                 errorWidget: (context, url, error) => Container(
-                  height: 200,
+                  height: 250,
                   alignment: Alignment.center,
-                  child: Icon(Icons.question_mark, size: 60, color: Colors.grey[400]),
+                  // Si falla, mostramos el fallback pixelado
+                  child: CachedNetworkImage(
+                    imageUrl: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${widget.pokemonId}.png',
+                    errorWidget: (context, url, error) => Icon(Icons.question_mark, size: 60, color: Colors.grey[400]),
+                  ),
                 ),
-                height: 250, // Más grande
+                height: 250,
                 fit: BoxFit.contain,
               ),
             ),
-            const SizedBox(height: 24),
+          ),
+          const SizedBox(height: 24),
 
-            // 2. Nombre y Número
-            Text(
-              '#${pokemon.id.toString().padLeft(4, '0')}',
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '${pokemon.name[0].toUpperCase()}${pokemon.name.substring(1)}',
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            Divider(color: Colors.grey[300]), // Separador visual
-            const SizedBox(height: 20),
+          // 2. Nombre y Número
+          Text('#${widget.pokemonId.toString().padLeft(4, '0')}'), // Usamos el ID del widget
+          const SizedBox(height: 8),
+          Text(
+            // Mostramos el nombre cuando cargue, si no "Cargando..."
+            _isLoading ? 'Cargando...' : '${pokemon!.name[0].toUpperCase()}${pokemon.name.substring(1)}',
+            style: GoogleFonts.pressStart2p(fontSize: 28),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          Divider(color: Colors.grey[300]),
+          const SizedBox(height: 20),
 
-            // 3. Tipos (en Chips)
-            Wrap( // Permite que los chips pasen a la siguiente línea si no caben
-              spacing: 8.0, // Espacio horizontal entre chips
-              runSpacing: 4.0, // Espacio vertical entre líneas de chips
-              alignment: WrapAlignment.center,
-              children: pokemon.types.map((type) => Chip(
-                label: Text(
-                  type.toUpperCase(),
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          // 3. Tipos (Muestra spinner si está cargando)
+          _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Wrap( // Si ya cargó, muestra los chips
+                  spacing: 8.0,
+                  runSpacing: 4.0,
+                  alignment: WrapAlignment.center,
+                  children: pokemon!.types
+                      .map((type) => Chip(
+                            label: Text(
+                              type.toUpperCase(),
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            backgroundColor: _getColorForType(type),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0, vertical: 8.0),
+                          ))
+                      .toList(),
                 ),
-                backgroundColor: _getColorForType(type), // Función helper para el color
-                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-              )).toList(),
-            ),
-            const SizedBox(height: 24),
+          const SizedBox(height: 24),
 
-            // 4. Altura y Peso (en una fila)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Espaciado equitativo
-              children: [
-                _buildStatColumn('Altura', '$heightInMeters m'),
-                _buildStatColumn('Peso', '$weightInKilograms kg'),
-              ],
-            ),
-            const SizedBox(height: 20), // Espacio al final
-          ],
-        ),
-      );
-    } else {
-      return const Center(child: Text('No hay datos para mostrar'));
-    }
+          // 4. Altura y Peso (Muestra '...' si está cargando)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildStatColumn('Altura', '$heightInMeters m'),
+              _buildStatColumn('Peso', '$weightInKilograms kg'),
+            ],
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
   }
 
-  // Widget helper para mostrar Altura/Peso
+  // Widget helper (sin cambios)
   Widget _buildStatColumn(String label, String value) {
     return Column(
       children: [
-        Text(
-          label,
-        ),
+        Text(label, style: TextStyle(fontSize: 14, color: Colors.grey[600])),
         const SizedBox(height: 4),
-        Text(
-          value,
-        ),
+        Text(value, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       ],
     );
   }
 
-  // Función helper para asignar colores a los tipos
-  // (Puedes expandir esto con más tipos o usar un paquete)
+  // Función de color (sin cambios)
   Color _getColorForType(String type) {
     switch (type.toLowerCase()) {
       case 'grass': return Colors.green.shade400;

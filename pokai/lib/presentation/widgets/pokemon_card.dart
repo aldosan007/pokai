@@ -33,43 +33,51 @@ class PokemonCard extends StatelessWidget {
         },
         splashColor: Colors.red.withOpacity(0.1),
         highlightColor: Colors.red.withOpacity(0.05),
-        borderRadius: (Theme.of(context).cardTheme.shape as RoundedRectangleBorder)
-            .borderRadius
-            .resolve(Directionality.of(context)),
-        
+        borderRadius:
+            (Theme.of(context).cardTheme.shape as RoundedRectangleBorder)
+                .borderRadius
+                .resolve(Directionality.of(context)),
+
         // --- [INICIO DEL CAMBIO DE LAYOUT] ---
         // Usamos una Columna en lugar de un Row
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch, // Estirar hijos a lo ancho
+          crossAxisAlignment:
+              CrossAxisAlignment.stretch, // Estirar hijos a lo ancho
           children: [
             // --- 1. IMAGEN (Ahora ocupa la parte de arriba) ---
             Expanded(
               flex: 6, // La imagen ocupa la mayor parte del espacio
               child: Padding(
                 padding: const EdgeInsets.all(8.0), // Un pequeño padding
-                child: CachedNetworkImage(
-                  imageUrl: pokemon.spriteUrl,
-                  placeholder: (context, url) => Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.red.shade200,
-                      strokeWidth: 2.0,
+                child: Hero(
+                  // El tag debe ser único. Usamos el ID.
+                  tag: 'pokemon-image-${pokemon.id}',
+                  child: CachedNetworkImage(
+                    imageUrl: pokemon.spriteUrl,
+                    // ... (resto de tu código de CachedNetworkImage)
+                    placeholder: (context, url) => Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.red.shade200,
+                        strokeWidth: 2.0,
+                      ),
                     ),
+                    errorWidget: (context, url, error) {
+                      return CachedNetworkImage(
+                        imageUrl: fallbackSpriteUrl,
+                        errorWidget: (context, urlFallback, errorFallback) {
+                          return Icon(
+                            Icons.question_mark_rounded,
+                            color: Colors.grey.shade400,
+                            size: 40,
+                          );
+                        },
+                        fit: BoxFit.contain,
+                      );
+                    },
+                    fit: BoxFit.contain,
                   ),
-                  errorWidget: (context, url, error) {
-                    return CachedNetworkImage(
-                      imageUrl: fallbackSpriteUrl,
-                      errorWidget: (context, urlFallback, errorFallback) {
-                        return Icon(
-                          Icons.question_mark_rounded,
-                          color: Colors.grey.shade400,
-                          size: 40,
-                        );
-                      },
-                      fit: BoxFit.contain, // Ajustar la imagen
-                    );
-                  },
-                  fit: BoxFit.contain, // Ajustar la imagen
                 ),
+                // --- FIN DEL WIDGET HERO --
               ),
             ),
 
@@ -77,7 +85,10 @@ class PokemonCard extends StatelessWidget {
             Expanded(
               flex: 3, // Ocupa el espacio restante
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10.0,
+                  vertical: 4.0,
+                ),
                 child: Column(
                   // Centramos el texto y el ID
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -85,7 +96,8 @@ class PokemonCard extends StatelessWidget {
                   children: [
                     // --- Row para el ID y el Corazón ---
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Empuja el corazón a la derecha
+                      mainAxisAlignment: MainAxisAlignment
+                          .spaceBetween, // Empuja el corazón a la derecha
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // ID del Pokémon
@@ -100,15 +112,22 @@ class PokemonCard extends StatelessWidget {
                         // Botón de Favorito
                         Consumer<FavoritesController>(
                           builder: (context, controller, child) {
-                            final bool esFavorito = controller.isFavorite(pokemon.id);
-                            return InkWell( // Usamos InkWell para un área de toque más pequeña
+                            final bool esFavorito = controller.isFavorite(
+                              pokemon.id,
+                            );
+                            return InkWell(
+                              // Usamos InkWell para un área de toque más pequeña
                               onTap: () {
                                 controller.toggleFavorite(pokemon.id);
                               },
                               borderRadius: BorderRadius.circular(20),
                               child: Icon(
-                                esFavorito ? Icons.favorite : Icons.favorite_border,
-                                color: esFavorito ? Colors.red : Colors.grey[400],
+                                esFavorito
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: esFavorito
+                                    ? Colors.red
+                                    : Colors.grey[400],
                                 size: 24, // Icono más pequeño
                               ),
                             );
@@ -117,7 +136,7 @@ class PokemonCard extends StatelessWidget {
                       ],
                     ),
                     // Espacio
-                    const Spacer(), 
+                    const Spacer(),
                     // Nombre del Pokémon
                     Text(
                       '${pokemon.name[0].toUpperCase()}${pokemon.name.substring(1)}',
