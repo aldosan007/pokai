@@ -21,14 +21,12 @@ void main() {
 
   runApp(
     // 3. "Inyectamos" el Cerebro (Controller) usando Provider
-// Usamos MultiProvider para inyectar MÁS DE UNA COSA
+    // Usamos MultiProvider para inyectar MÁS DE UNA COSA
     MultiProvider(
       providers: [
         // 1. Proveemos el Repository directamente
         //    Cualquier widget hijo podrá pedirlo con context.read<PokemonRepository>()
-        Provider<PokemonRepository>(
-          create: (_) => repository,
-        ),
+        Provider<PokemonRepository>(create: (_) => repository),
 
         // 2. Proveemos el Controller (que DEPENDE del Repository)
         //    Usamos context.read() DENTRO de create para obtener el repo ya provisto.
@@ -50,13 +48,12 @@ void main() {
   );
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-// "Escucha" al ThemeController para redibujar cuando cambie el tema
+    // "Escucha" al ThemeController para redibujar cuando cambie el tema
     return Consumer<ThemeController>(
       builder: (context, themeController, child) {
         // El Consumer nos da el 'themeController'
@@ -64,18 +61,14 @@ class MyApp extends StatelessWidget {
           title: 'Pokai',
           debugShowCheckedModeBanner: false,
 
-          // 1. Define el TEMA CLARO
-          theme: buildAppTheme(), // Nuestra función de tema claro
+          // Elige el tema instantáneamente
+          theme: themeController.isDarkMode
+              ? buildAppDarkTheme() // Si está en modo oscuro, usa el tema oscuro
+              : buildAppTheme(), // Si no, usa el tema claro
 
-          // 2. Define el TEMA OSCURO
-          darkTheme: buildAppDarkTheme(), // Nuestra función de tema oscuro
-
-          // 3. Elige QUÉ TEMA MOSTRAR
-          // basado en el estado del ThemeController
-          themeMode: themeController.isDarkMode
-              ? ThemeMode.dark
-              : ThemeMode.light,
-
+          // Estas propiedades ya no son necesarias:
+          // darkTheme: buildAppDarkTheme(),
+          // themeMode: themeController.isDarkMode ...
           home: const HomePage(),
         );
       },

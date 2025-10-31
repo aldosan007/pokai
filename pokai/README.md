@@ -1,16 +1,49 @@
-# pokai
+# Pokai: Pokédex Interactiva
 
-A new Flutter project.
+Aplicación Flutter que usa la [PokeAPI](https://pokeapi.co/) para mostrar, buscar y explorar Pokémon.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## Funcionalidades
+- Lista de Pokémon con número, nombre e imagen.  
+- **Scroll infinito** para cargar más al llegar al final.  
+- **Búsqueda en tiempo real** por nombre.  
+- **Pantalla de detalle** con imagen, tipos, altura y peso.  
+- **Modo oscuro/claro** y **favoritos**, guardados con `SharedPreferences`.  
+- **Animación Hero** entre lista y detalle.  
 
-A few resources to get you started if this is your first Flutter project:
+---
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Tecnologías
+- **Flutter / Dart**  
+- **http** – Peticiones a la API  
+- **provider** – Manejo de estado  
+- **cached_network_image** – Cache de imágenes  
+- **google_fonts** – Tipografía  
+- **shared_preferences** – Datos locales  
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## Ejecución
+```bash
+git clone https://github.com/aldosan007/pokai.git
+cd pokai
+flutter pub get
+flutter run
+
+
+
+Desafíos Encontrados
+•	Error 429 (Too Many Requests): Al hacer scroll rápido, el servidor bloquea temporalmente las imágenes.
+🔹 Solución: Implementación de un “fallback” que intenta cargar otra imagen o muestra un ícono por defecto.
+•	Animación Hero: Inicialmente no funcionaba porque la pantalla de detalle mostraba un CircularProgressIndicator.
+🔹 Solución: Mantener el Hero activo mientras se cargan los demás datos para asegurar una transición fluida.
+
+Aprendizajes del Proyecto
+•	Separación de la lógica en capas (Datos, Estado y Presentación).
+•	Uso de Provider para manejo global del estado.
+•	Implementación de scroll infinito con ScrollController.
+•	Manejo de errores y límites de la API externa.
+•	Temas dinámicos (oscuro / claro) con persistencia local.
+•	Creación de animaciones implícitas (Hero) para una experiencia más profesional.
+
