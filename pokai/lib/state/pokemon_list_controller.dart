@@ -61,7 +61,7 @@ class PokemonListController with ChangeNotifier {
       _isLoadingMore = false;
     } catch (e) {
       _isLoadingMore = false;
-      print('Error en loadInitial: $e');
+      debugPrint('Error en loadInitial: $e');
       // Podrías añadir un estado de error aquí si quisieras
     }
     notifyListeners(); // Avisar UI (mostrar lista)
@@ -87,7 +87,7 @@ class PokemonListController with ChangeNotifier {
       _isLoadingMore = false;
     } catch (e) {
       _isLoadingMore = false;
-      print('Error en loadMore: $e');
+      debugPrint('Error en loadMore: $e');
       // Podrías intentar recargar o mostrar un error en el footer
     }
     notifyListeners(); // Avisar UI (actualizar lista y footer)
