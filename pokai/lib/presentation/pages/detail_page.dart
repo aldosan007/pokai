@@ -69,7 +69,6 @@ class _DetailPageState extends State<DetailPage> {
         elevation: 0, // Sin sombra para un look más plano
       ),
       body: _buildBody(),
-      backgroundColor: Colors.grey[100], // Fondo suave
     );
   }
 
