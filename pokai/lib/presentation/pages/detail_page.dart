@@ -1,8 +1,6 @@
-// lib/presentation/pages/detail_page.dart
-
 import 'package:cached_network_image/cached_network_image.dart'; // Importar para la imagen
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart'; // Para fuentes
+//import 'package:google_fonts/google_fonts.dart'; // Para fuentes
 import 'package:provider/provider.dart';
 import 'package:pokai/data/models/pokemon_detail.dart';
 import 'package:pokai/data/repositories/pokemon_repository.dart';

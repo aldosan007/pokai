@@ -1,5 +1,3 @@
-// lib/data/services/poke_api_service.dart
-
 import 'dart:convert'; // Necesario para decodificar el JSON
 import 'package:http/http.dart' as http; // Nuestro paquete para peticiones web
 

@@ -1,5 +1,3 @@
-// lib/data/models/pokemon_detail.dart
-
 class PokemonDetail {
   final int id;
   final String name;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pokai/presentation/pages/home_page.dart';
 import 'package:provider/provider.dart'; // 1. Importamos Provider
+import 'package:pokai/state/favorites_controller.dart';
 
 // Importamos nuestras clases (el "cerebro" y sus dependencias)
 import 'package:pokai/data/repositories/pokemon_repository.dart';
@@ -39,7 +40,9 @@ void main() {
         ChangeNotifierProvider<ThemeController>(
           create: (_) => ThemeController(), // Crea el cerebro del tema
         ),
-        // Podríamos añadir más providers aquí (ej: PokemonDetailController)
+        ChangeNotifierProvider<FavoritesController>(
+          create: (_) => FavoritesController(), // Crea el cerebro de favoritos
+        ),
       ],
       // MyApp sigue siendo el hijo principal
       child: const MyApp(),

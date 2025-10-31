@@ -1,5 +1,3 @@
-// lib/presentation/pages/home_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pokai/state/pokemon_list_controller.dart';

@@ -1,5 +1,3 @@
-// lib/data/repositories/pokemon_repository.dart
-
 import 'package:pokai/data/models/pokemon_detail.dart';
 import 'package:pokai/data/models/pokemon_list_item.dart';
 import 'package:pokai/data/services/poke_api_service.dart';

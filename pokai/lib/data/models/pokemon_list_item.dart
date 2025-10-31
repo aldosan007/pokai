@@ -1,5 +1,3 @@
-// lib/data/models/pokemon_list_item.dart
-
 class PokemonListItem {
   final int id;
   final String name;

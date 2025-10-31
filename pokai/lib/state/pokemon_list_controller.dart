@@ -1,5 +1,3 @@
-// lib/state/pokemon_list_controller.dart
-
 import 'dart:async'; // Necesario para el Timer del debounce
 import 'package:flutter/material.dart';
 import 'package:pokai/data/models/pokemon_list_item.dart';

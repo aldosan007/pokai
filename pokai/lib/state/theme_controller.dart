@@ -1,4 +1,3 @@
-// lib/state/theme_controller.dart
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Importar para guardar
 
