@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pokai - Mi Pokédex'),
+        title: const Text('Pokai - Pokédex'),
         actions: [
       // "Escucha" al ThemeController para saber qué ícono mostrar
       Consumer<ThemeController>(
@@ -165,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                   // Si ya no hay más, mostrar mensaje final
                   return const Padding(
                     padding: EdgeInsets.symmetric(vertical: 32.0),
-                    child: Center(child: Text('¡Has atrapado a todos!')),
+                    child: Center(child: Text('¡Has visto a todos!')),
                   );
                 }
               }
