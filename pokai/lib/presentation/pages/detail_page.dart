@@ -118,7 +118,6 @@ class _DetailPageState extends State<DetailPage> {
             // 1. Imagen Grande
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
                 borderRadius: BorderRadius.circular(15.0),
                 boxShadow: [
                   BoxShadow(
@@ -148,12 +147,10 @@ class _DetailPageState extends State<DetailPage> {
             // 2. Nombre y Número
             Text(
               '#${pokemon.id.toString().padLeft(4, '0')}',
-              style: TextStyle(fontSize: 18, color: Colors.grey[600]),
             ),
             const SizedBox(height: 8),
             Text(
               '${pokemon.name[0].toUpperCase()}${pokemon.name.substring(1)}',
-              style: GoogleFonts.pressStart2p(fontSize: 28, color: Colors.black87),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
@@ -199,12 +196,10 @@ class _DetailPageState extends State<DetailPage> {
       children: [
         Text(
           label,
-          style: TextStyle(fontSize: 14, color: Colors.grey[600]),
         ),
         const SizedBox(height: 4),
         Text(
           value,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
         ),
       ],
     );

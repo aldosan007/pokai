@@ -19,7 +19,6 @@ class PokemonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.white,
       elevation: 4.0,
       margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: InkWell(
@@ -85,7 +84,6 @@ class PokemonCard extends StatelessWidget {
                       '#${pokemon.id.toString().padLeft(4, '0')}',
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.grey.shade600,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -94,7 +92,6 @@ class PokemonCard extends StatelessWidget {
                       '${pokemon.name[0].toUpperCase()}${pokemon.name.substring(1)}',
                       style: GoogleFonts.pressStart2p(
                         fontSize: 16,
-                        color: Colors.black87,
                       ),
                       maxLines: 1, 
                       overflow: TextOverflow.ellipsis,
