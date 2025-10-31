@@ -142,10 +142,19 @@ class _HomePageState extends State<HomePage> {
           }
 
           // --- CASO 3: Mostrar la lista (completa o filtrada) ---
-          return ListView.builder(
-            controller: _scrollController, // Conectar el controlador de scroll
-            // Si estamos buscando, el itemCount es solo la lista filtrada
-            // Si no, es la lista + 1 para el espacio del footer de carga
+        // Reemplazamos ListView.builder por GridView.builder
+      return GridView.builder(
+        controller: _scrollController, // ¡El scroll controller sigue funcionando igual!
+        padding: const EdgeInsets.all(12.0), // Añadir padding alrededor de la cuadrícula
+
+        // --- ¡ESTA ES LA PARTE NUEVA! ---
+        // Define cómo se ve la cuadrícula
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, // ¡Dos columnas! (Puedes cambiar a 3 si prefieres)
+          childAspectRatio: 1.0, // Relación ancho/alto de la tarjeta
+          crossAxisSpacing: 10,  // Espacio horizontal entre tarjetas
+          mainAxisSpacing: 10,   // Espacio vertical entre tarjetas
+        ),
             itemCount: controller.isSearching
                 ? controller.pokemonList.length
                 : controller.pokemonList.length + 1,
