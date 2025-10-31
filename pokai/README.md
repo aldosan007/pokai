@@ -30,7 +30,7 @@ git clone https://github.com/aldosan007/pokai.git
 cd pokai
 flutter pub get
 flutter run
-
+```
 
 
 Desafíos Encontrados
