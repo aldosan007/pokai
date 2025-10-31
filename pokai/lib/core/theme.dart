@@ -6,7 +6,7 @@ ThemeData buildAppTheme() {
   final baseTheme = ThemeData.light();
 
   return baseTheme.copyWith(
-    // 1. Paleta de Colores Principal - CORREGIDO
+    // 1. Paleta de Colores Principal
     // Usamos colorScheme generado desde el primarySwatch
     colorScheme: ColorScheme.fromSwatch(
       primarySwatch: Colors.red,
@@ -22,7 +22,7 @@ ThemeData buildAppTheme() {
 
     // 3. Estilo del AppBar (Global)
     appBarTheme: AppBarTheme(
-      backgroundColor: Colors.red[600],
+      backgroundColor: Colors.red[900],
       foregroundColor: Colors.white,
       elevation: 2.0,
       titleTextStyle: GoogleFonts.pressStart2p(
@@ -34,7 +34,7 @@ ThemeData buildAppTheme() {
       ),
     ),
 
-    // 4. Estilo de las Tarjetas (Global) - CORREGIDO
+    // 4. Estilo de las Tarjetas (Global)
     cardTheme: CardThemeData( // <-- Nombre correcto de la clase
       color: Colors.white,
       elevation: 3.0,

@@ -119,7 +119,6 @@ class _HomePageState extends State<HomePage> {
         ),
         // Opcional: Darle un poco de elevación al AppBar
         elevation: 2.0,
-        backgroundColor: Theme.of(context).primaryColor, // Usar color primario del tema
       ),
       // Usamos Consumer para escuchar los cambios del PokemonListController
       body: Consumer<PokemonListController>(

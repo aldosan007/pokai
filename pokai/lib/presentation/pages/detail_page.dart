@@ -65,7 +65,7 @@ class _DetailPageState extends State<DetailPage> {
         // Dejamos que el Tema Global maneje el color del AppBar
         // backgroundColor: Colors.redAccent, 
         elevation: 0,
-        // --- AÑADIMOS BOTÓN DE FAVORITO AQUÍ TAMBIÉN ---
+        // ---BOTÓN DE FAVORITO AQUÍ TAMBIÉN ---
         actions: [
           if (_pokemonDetail != null) // Solo mostrar si el pokémon cargó
             Consumer<FavoritesController>( // Importa 'favorites_controller.dart'
