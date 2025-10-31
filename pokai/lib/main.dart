@@ -7,7 +7,7 @@ import 'package:pokai/data/repositories/pokemon_repository.dart';
 import 'package:pokai/data/services/poke_api_service.dart';
 import 'package:pokai/state/pokemon_list_controller.dart';
 import 'package:pokai/core/theme.dart';
-
+import 'package:pokai/state/theme_controller.dart';
 
 void main() {
   // --- Configuración de Dependencias ---
@@ -36,7 +36,9 @@ void main() {
             context.read<PokemonRepository>(), // Le pasamos el repo
           )..loadInitial(), // Iniciamos la carga
         ),
-
+        ChangeNotifierProvider<ThemeController>(
+          create: (_) => ThemeController(), // Crea el cerebro del tema
+        ),
         // Podríamos añadir más providers aquí (ej: PokemonDetailController)
       ],
       // MyApp sigue siendo el hijo principal
@@ -51,11 +53,30 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Pokai',
-      debugShowCheckedModeBanner: false, // Quitamos la cinta de "Debug"
-      theme: buildAppTheme(),
-      home: const HomePage(),
+// "Escucha" al ThemeController para redibujar cuando cambie el tema
+    return Consumer<ThemeController>(
+      builder: (context, themeController, child) {
+        // El Consumer nos da el 'themeController'
+        return MaterialApp(
+          title: 'Pokai',
+          debugShowCheckedModeBanner: false,
+
+          // 1. Define el TEMA CLARO
+          theme: buildAppTheme(), // Nuestra función de tema claro
+
+          // 2. Define el TEMA OSCURO
+          darkTheme: buildAppDarkTheme(), // Nuestra función de tema oscuro
+
+          // 3. Elige QUÉ TEMA MOSTRAR
+          // basado en el estado del ThemeController
+          themeMode: themeController.isDarkMode
+              ? ThemeMode.dark
+              : ThemeMode.light,
+
+          home: const HomePage(),
+        );
+      },
     );
+    // --- FIN DEL CONSUMER ---
   }
 }

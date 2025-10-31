@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pokai/state/pokemon_list_controller.dart';
 import 'package:pokai/presentation/widgets/pokemon_card.dart';
-// En el siguiente paso importaremos detail_page.dart
+import 'package:pokai/state/theme_controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -58,6 +58,26 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pokai - Mi Pokédex'),
+        actions: [
+      // "Escucha" al ThemeController para saber qué ícono mostrar
+      Consumer<ThemeController>(
+        builder: (context, themeController, child) {
+          return IconButton(
+            // Cambia el ícono según el modo actual
+            icon: Icon(
+              themeController.isDarkMode 
+                ? Icons.light_mode // Ícono de sol (modo oscuro activo)
+                : Icons.dark_mode,  // Ícono de luna (modo claro activo)
+            ),
+            onPressed: () {
+              // Llama a la función para cambiar el tema
+              context.read<ThemeController>().toggleTheme();
+            },
+            tooltip: 'Cambiar tema', // Texto de ayuda
+          );
+        },
+      ),
+    ],
         // Usamos 'bottom' para colocar la barra de búsqueda debajo del título
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight), // Altura estándar
@@ -159,8 +179,6 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
-      // Opcional: Cambiar color de fondo general de la app
-      backgroundColor: Colors.grey[100],
     );
   }
 }
