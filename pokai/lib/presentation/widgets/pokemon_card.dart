@@ -31,8 +31,8 @@ class PokemonCard extends StatelessWidget {
             ),
           );
         },
-        splashColor: Colors.red.withOpacity(0.1),
-        highlightColor: Colors.red.withOpacity(0.05),
+        splashColor: const Color.fromARGB(26, 244, 67, 54),
+        highlightColor: const Color.fromARGB(13, 244, 67, 54),
         borderRadius:
             (Theme.of(context).cardTheme.shape as RoundedRectangleBorder)
                 .borderRadius
