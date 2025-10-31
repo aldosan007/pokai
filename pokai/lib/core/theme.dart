@@ -47,7 +47,7 @@ ThemeData buildAppTheme() {
     // 5. Estilo de los TextFields (para la búsqueda)
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: Colors.white.withOpacity(0.9),
+      fillColor: const Color.fromARGB(230, 255, 255, 255),
       hintStyle: TextStyle(color: Colors.grey[600]),
       prefixIconColor: Colors.grey[600],
       suffixIconColor: Colors.grey[600],
