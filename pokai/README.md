@@ -32,14 +32,17 @@ flutter pub get
 flutter run
 ```
 
+---
 
-Desafíos Encontrados
+## Desafíos Encontrados
 •	Error 429 (Too Many Requests): Al hacer scroll rápido, el servidor bloquea temporalmente las imágenes.
 🔹 Solución: Implementación de un “fallback” que intenta cargar otra imagen o muestra un ícono por defecto.
 •	Animación Hero: Inicialmente no funcionaba porque la pantalla de detalle mostraba un CircularProgressIndicator.
 🔹 Solución: Mantener el Hero activo mientras se cargan los demás datos para asegurar una transición fluida.
 
-Aprendizajes del Proyecto
+---
+
+## Aprendizajes del Proyecto
 •	Separación de la lógica en capas (Datos, Estado y Presentación).
 •	Uso de Provider para manejo global del estado.
 •	Implementación de scroll infinito con ScrollController.
@@ -47,3 +50,4 @@ Aprendizajes del Proyecto
 •	Temas dinámicos (oscuro / claro) con persistencia local.
 •	Creación de animaciones implícitas (Hero) para una experiencia más profesional.
 
+---
